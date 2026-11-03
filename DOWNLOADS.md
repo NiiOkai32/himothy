@@ -1,11 +1,9 @@
-# CampusFit Android download
+# Download CampusFit for Android
 
-A CampusFit debug APK is being provided as a draft GitHub Release for the repository owner to download.
+Download **CampusFit-download.zip**, extract it, then open **CampusFit.apk** on your Android 8.0+ phone.
 
-Sign in with a GitHub account that can access this repository's draft releases, open **Releases**, select the CampusFit Android test build, and download **CampusFit.apk** from **Assets**. Open that file on an Android 8.0+ phone to install it.
+Download URL: https://raw.githubusercontent.com/NiiOkai32/himothy/apk-download-20261103/CampusFit-download.zip
 
-The APK includes the configured Firebase project and Google OAuth setup. Physical-device sign-in testing remains pending. Cloud Functions deployment was deferred, so cloud activity sync, social competition, remote push, and full cloud-account deletion are unavailable until the backend is deployed.
+This is a debug/test build with the supplied Firebase and Google OAuth configuration. Physical-device sign-in testing remains pending. Cloud Functions deployment was deferred, so cloud activity syncing, social competition, remote push and full cloud-account deletion require later backend deployment.
 
-This is a debug/test build. It is not a Play Store release.
-
-APK SHA-256: `534ec5b4e85309f8dff63539d5832c40cea637be622351dbd069c43668b1b66a`
+The ZIP contains the APK and its SHA-256 checksum. A ZIP checksum is also provided beside the download.
