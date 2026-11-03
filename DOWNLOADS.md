@@ -15,3 +15,5 @@ Extract the ZIP and install CampusFit.apk on Android 8.0+. This update uses the 
 This is a debug/test build with the supplied Firebase/Google configuration. Cloud Functions are still deferred: shared games, remote push, cloud activity uploads and full cloud deletion need backend deployment. Physical-device sign-in/sensors remain unverified.
 
 Checksums accompany the ZIP and its enclosed APK. No application source is published by this artifact update.
+
+Verified: 99 JVM tests, 0 lint errors (9 existing warnings), APK signature, and basic Android 8 emulator flows including profile retention, expanded sheets, setup scrolling and pausing workouts for tips. Live sign-in and physical sensors remain unverified.
