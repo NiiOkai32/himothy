@@ -1,0 +1,61 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    function owner(uid) {
+      return request.auth != null && request.auth.uid == uid
+        && !exists(/databases/$(database)/documents/accountTombstones/$(uid));
+    }
+    function verifiedOwner(uid) {
+      return owner(uid) && request.auth.token.email_verified == true;
+    }
+    // Health profiles are never publicly readable. JSON is an opaque private payload,
+    // not a trusted source of competition scores. Server scoring must validate inputs.
+    match /users/{uid} {
+      allow get: if verifiedOwner(uid);
+      allow list: if false;
+      allow create, update: if verifiedOwner(uid)
+        && request.resource.data.keys().hasOnly(['profileJson', 'schemaVersion'])
+        && request.resource.data.keys().hasAll(['profileJson', 'schemaVersion'])
+        && request.resource.data.profileJson is string
+        && request.resource.data.profileJson.size() <= 8192
+        && request.resource.data.schemaVersion == 1;
+      allow delete: if false; // Recursive erasure is performed by the callable backend.
+    }
+    // Private claims are written only by trusted callable functions, never by the client.
+    match /users/{uid}/weighIns/{day} { allow read: if verifiedOwner(uid); allow write: if false; }
+    match /users/{uid}/sessions/{id} { allow read: if verifiedOwner(uid); allow write: if false; }
+    match /users/{uid}/notifications/{id} {
+      allow read: if verifiedOwner(uid);
+      allow update: if verifiedOwner(uid) && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['read']) && request.resource.data.read == true;
+      allow create, delete: if false;
+    }
+    function signedIn() {
+      return request.auth != null && request.auth.token.email_verified == true
+        && !exists(/databases/$(database)/documents/accountTombstones/$(request.auth.uid));
+    }
+    function challengeAccess(c) {
+      return signedIn() && (c.owner == request.auth.uid
+        || (c.visibility == 'campus' && exists(/databases/$(database)/documents/publicProfiles/$(request.auth.uid))
+          && get(/databases/$(database)/documents/publicProfiles/$(request.auth.uid)).data.campusKey == c.campusKey)
+        || (c.groupId != '' && exists(/databases/$(database)/documents/groups/$(c.groupId))
+          && request.auth.uid in get(/databases/$(database)/documents/groups/$(c.groupId)).data.memberUids)
+        || (c.groupId == '' && c.visibility == 'friends'
+          && exists(/databases/$(database)/documents/users/$(request.auth.uid)/friends/$(c.owner))));
+    }
+    match /publicProfiles/{uid} { allow get: if verifiedOwner(uid); allow list, write: if false; }
+    match /friendships/{id} { allow read: if signedIn() && request.auth.uid in resource.data.memberUids; allow write: if false; }
+    match /groups/{id} { allow read: if signedIn() && request.auth.uid in resource.data.memberUids; allow write: if false; }
+    match /challenges/{id} { allow read: if challengeAccess(resource.data); allow write: if false; }
+    match /leagues/{id} { allow get: if signedIn() && request.auth.uid in resource.data.memberUids; allow list, write: if false; }
+    match /socialSignals/{uid} { allow get: if verifiedOwner(uid); allow list, write: if false; }
+    match /campusBoards/{campus}/members/{uid} {
+      allow read: if signedIn() && exists(/databases/$(database)/documents/publicProfiles/$(request.auth.uid))
+        && get(/databases/$(database)/documents/publicProfiles/$(request.auth.uid)).data.campusKey == campus;
+      allow write: if false;
+    }
+    // Membership internals, weight boards, game state, leagues, handles and invitation
+    // codes remain callable-only; clients never write authoritative scores or rosters.
+    // Future features stay inaccessible until their rules and backend are implemented.
+    match /{document=**} { allow read, write: if false; }
+  }
+}

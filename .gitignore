@@ -1,0 +1,24 @@
+*.iml
+.gradle/
+.idea/
+**/build/
+local.properties
+app/google-services.json
+.DS_Store
+
+functions/node_modules/
+*-debug.log
+.firebase/
+
+.kotlin/
+
+# Local credentials and signing material
+.env
+.env.*
+!.env.example
+*.jks
+*.keystore
+*.p12
+*.pfx
+service-account*.json
+*-firebase-adminsdk-*.json

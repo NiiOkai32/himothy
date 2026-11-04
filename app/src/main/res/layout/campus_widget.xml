@@ -1,0 +1,5 @@
+<!-- RemoteViews is hosted by the launcher, which does not use our Activity window background. -->
+<LinearLayout xmlns:tools="http://schemas.android.com/tools" tools:ignore="Overdraw" xmlns:android="http://schemas.android.com/apk/res/android" android:id="@+id/widget_root" android:layout_width="match_parent" android:layout_height="match_parent" android:orientation="vertical" android:padding="16dp" android:background="#153C32">
+ <TextView android:layout_width="match_parent" android:layout_height="wrap_content" android:text="@string/widget_title" android:textColor="#E4F6ED" android:textSize="18sp" android:textStyle="bold" />
+ <TextView android:id="@+id/widget_values" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="8dp" android:text="@string/widget_disabled" android:textColor="#E4F6ED" android:textSize="14sp" />
+</LinearLayout>

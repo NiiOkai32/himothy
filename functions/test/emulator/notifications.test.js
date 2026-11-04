@@ -1,0 +1,45 @@
+const { test, before, after } = require("node:test");
+const assert = require("node:assert/strict");
+const { initializeTestEnvironment, assertSucceeds, assertFails } = require("@firebase/rules-unit-testing");
+const { doc, setDoc, getDoc, updateDoc } = require("firebase/firestore");
+const { initializeApp, deleteApp } = require("firebase-admin/app");
+const { getFirestore } = require("firebase-admin/firestore");
+const fs = require("node:fs");
+const path = require("node:path");
+let env, app, db, service;
+const sent = [], projectId = "demo-campusfit";
+before(async () => {
+  assert.ok(process.env.FIRESTORE_EMULATOR_HOST, "Requires local emulator");
+  app = initializeApp({ projectId }, "notification-tests"); db = getFirestore(app);
+  // Inject the transport: this suite must never send an external push.
+  service = require("../../notifications/service")(db, { async sendEachForMulticast(message) { sent.push(message); return { responses: message.tokens.map(() => ({ success: true })) }; } });
+  env = await initializeTestEnvironment({ projectId, firestore: { rules: fs.readFileSync(path.join(__dirname, "../../../firestore.rules"), "utf8") } });
+});
+after(async () => { await env?.cleanup(); if(app)await deleteApp(app); });
+const request = (uid, data) => ({ auth: { uid, token: { email_verified: true } }, data: { uid, ...data } });
+test("private device transfer, deduplicated inbox, canonical generic delivery, rules and deletion barriers", async () => {
+  const u = "notify-owner", v = "notify-other";
+  for(const uid of [u,v])await db.doc(`users/${uid}`).set({ profileJson: "{}", schemaVersion: 1 });
+  const token = "test_opaque:device-token-1234567890";
+  const { key } = await service.action(request(u, { action: "register", token }));
+  await service.action(request(v, { action: "register", token }));
+  assert.equal((await db.doc(`users/${u}/devices/${key}`).get()).exists, false);
+  assert.equal((await db.doc(`notificationDeviceOwners/${key}`).get()).get("uid"), v);
+  await service.action(request(u, { action: "unregister", key }));
+  assert.equal((await db.doc(`notificationDeviceOwners/${key}`).get()).get("uid"), v, "Old account cannot revoke the new owner's binding");
+  for(let i=0;i<2;i++)await service.emit(v, "event-1", "cheer", "challenge_1");
+  const notes = await db.collection(`users/${v}/notifications`).get();assert.equal(notes.size,1);
+  const note = notes.docs[0];await service.dispatch(v,note.id);assert.equal(sent.length,1);
+  assert.deepEqual(sent[0].data,{uid:v,id:note.id,kind:"cheer"});assert.equal(sent[0].notification,undefined);
+  const owner=env.authenticatedContext(v,{email_verified:true}).firestore();const outsider=env.authenticatedContext(u,{email_verified:true}).firestore();
+  const ref=doc(owner,`users/${v}/notifications/${note.id}`);
+  await assertSucceeds(getDoc(ref));await assertFails(getDoc(doc(outsider,`users/${v}/notifications/${note.id}`)));
+  await assertFails(setDoc(doc(owner,`users/${v}/notifications/forged`),{kind:"trophy",read:false}));
+  await assertFails(updateDoc(ref,{target:"other"}));await assertFails(updateDoc(ref,{read:false}));
+  await assertSucceeds(updateDoc(ref,{read:true}));await service.dispatch(v,note.id);assert.equal(sent.length,1,"Read inbox suppresses transport");
+  await assertFails(getDoc(doc(owner,`users/${v}/devices/${key}`)));
+  await db.doc(`accountTombstones/${v}`).set({requestedAt:Date.now()});
+  await assert.rejects(service.action(request(v,{action:"register",token})),e=>e.code==="failed-precondition");
+  await service.emit(v,"after-delete","trophy");assert.equal((await db.collection(`users/${v}/notifications`).get()).size,1);
+  await assertFails(getDoc(ref));await service.cleanup(v);assert.equal((await db.doc(`notificationDeviceOwners/${key}`).get()).exists,false);
+});
