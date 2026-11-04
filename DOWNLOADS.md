@@ -1,23 +1,23 @@
-# CampusFit 0.3.0 - human exercise demos and offline countdowns
+# CampusFit 0.4.0 - animated 3D exercise demos
 
-Download: https://raw.githubusercontent.com/NiiOkai32/himothy/apk-download-20261103/CampusFit-0.3.0-download.zip
+Download: https://raw.githubusercontent.com/NiiOkai32/himothy/apk-download-20261103/CampusFit-0.4.0-download.zip
 
-Extract the ZIP, then install CampusFit.apk on Android 8.0 or later. Version code 3
-uses the existing signing certificate and can update the previous app without uninstalling.
+Extract the ZIP and install CampusFit.apk on Android 8.0 or later. Version code 4
+uses the existing signing certificate and updates the previous app without uninstalling.
 
-- Animated, clothed 2D people demonstrate all 72 exercises in the library, details and player.
-- Exercise-specific movements include standing, floor, dance and outdoor exercises.
-- Spoken 3, 2, 1 and go before each movement, plus the final-three-second countdown.
-- Countdown clips work offline, with a separate sound switch, optional form narration and haptics.
-- Previews can be paused; disabled Android animations show a representative still pose.
-- Count-ins add 3 seconds per movement without earning activity time or calories.
+- Solid animated 3D people demonstrate all 72 exercises, with perspective and lighting.
+- Turn or reset the camera in exercise details and the workout player.
+- Movement rigs include forward/back depth, standing poses, floor work and dance.
+- Everything is bundled offline; no model or video download is needed.
+- Spoken 3, 2, 1, go and the ending countdown retain independent sound controls.
+- Pausing, backgrounding and Android's disabled-animation setting are respected.
+- Devices that cannot initialize OpenGL receive a labelled still 3D preview.
 
-106 JVM tests pass; lint reports no errors and 9 existing warnings. Android 8 emulator
-checks cover human illustrations, live animation, reduced motion and upgrade retention. The player puts start/pause beside the countdown
-and moves audio controls into a settings sheet.
-The signed universal APK includes ARM and x86 variants. Audio clips are bundled and
-validated; speaker playback on a physical phone remains to be checked.
+111 JVM tests pass; lint reports no errors. Existing Firebase client configuration
+is retained; Cloud Functions deployment remains deferred. This is a signed debug/test
+build. Physical-phone graphics performance and speaker playback still need checking.
 
-This is a debug/test build. The supplied Firebase client configuration is retained;
-Cloud Functions deployment is still deferred. No screenshots or app source are included
-in this artifact update. ZIP and APK checksums accompany the download.
+Full source: https://github.com/NiiOkai32/himothy
+
+ZIP and enclosed APK checksums accompany the download. This artifact update includes
+only APK ZIPs, checksums and these instructions; no UI screenshots or credentials.
