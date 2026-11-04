@@ -29,8 +29,8 @@ android {
         applicationId = "com.campusfit"
         minSdk = 26
         targetSdk = 37
-        versionCode = 3
-        versionName = "0.3.0"
+        versionCode = 4
+        versionName = "0.4.0"
         if (!hasGoogleWebClient) resValue("string", "default_web_client_id", "")
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }

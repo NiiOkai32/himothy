@@ -102,7 +102,7 @@ private fun estimate(calories: Double) = "~%.1f kcal".format(Locale.getDefault()
     Column(Modifier.fillMaxSize().safeDrawingPadding().verticalScroll(rememberScrollState()).padding(20.dp), verticalArrangement = Arrangement.spacedBy(16.dp)) {
         WorkoutHeading(exercise?.name ?: "Exercise", back)
         if (exercise == null) { Text(if (state.loading) "Loading exercise…" else "This exercise could not be found."); return@Column }
-        ExerciseDemo(exercise, playing = animate)
+        ExerciseDemo(exercise,Modifier.height(260.dp), playing = animate, interactive = true)
         TextButton(onClick = { animate = !animate }) { Text(if (animate) "Pause demo" else "Play demo") }
         SoftTag("Follow the form tips below",Icons.Default.CheckCircleOutline)
         Text("${exercise.category} · ${exercise.difficulty}", color = MaterialTheme.colorScheme.primary)
@@ -238,7 +238,7 @@ private fun estimate(calories: Double) = "~%.1f kcal".format(Locale.getDefault()
             return@Column
         }
         Text("${stage?.kind?.name?.lowercase()?.replaceFirstChar(Char::uppercase)} · ${run.stageIndex + 1}/${run.plan.stages.size}", style = MaterialTheme.typography.labelLarge, color=MaterialTheme.colorScheme.primary)
-        if (exercise != null) ExerciseDemo(exercise,Modifier.height(160.dp), playing = !run.paused && run.preparationMillis == 0L) else Icon(Icons.Default.SelfImprovement, null, Modifier.size(96.dp), tint = MaterialTheme.colorScheme.primary)
+        if (exercise != null) ExerciseDemo(exercise,Modifier.height(160.dp), playing = !run.paused && run.preparationMillis == 0L, interactive = true) else Icon(Icons.Default.SelfImprovement, null, Modifier.size(96.dp), tint = MaterialTheme.colorScheme.primary)
         Row(Modifier.fillMaxWidth(),horizontalArrangement=Arrangement.SpaceEvenly,verticalAlignment=Alignment.CenterVertically) {
         Text(if(run.preparationSeconds > 0) run.preparationSeconds.toString() else clock(run.remainingSeconds),
             modifier = Modifier.semantics { if(run.preparationSeconds > 0 || run.remainingSeconds <= 3) liveRegion = LiveRegionMode.Polite; contentDescription = if(run.preparationSeconds > 0) "Get ready. ${run.preparationSeconds}" else "${run.remainingSeconds} seconds remaining" },

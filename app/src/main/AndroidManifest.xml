@@ -8,6 +8,7 @@
     <uses-permission android:name="android.permission.health.READ_EXERCISE" />
     <uses-feature android:name="android.hardware.camera" android:required="false" />
     <uses-feature android:name="android.hardware.location.gps" android:required="false" />
+    <uses-feature android:glEsVersion="0x00020000" android:required="false" />
     <queries><package android:name="com.google.android.apps.healthdata" /><intent><action android:name="android.intent.action.TTS_SERVICE" /></intent></queries>
     <application android:name=".CampusFitApplication" android:allowBackup="false" android:fullBackupContent="false" android:dataExtractionRules="@xml/data_extraction_rules" android:label="CampusFit" android:icon="@drawable/ic_launcher_buddy" android:supportsRtl="true" android:theme="@style/Theme.CampusFit">
         <provider android:exported="false" android:name="androidx.startup.InitializationProvider" android:authorities="${applicationId}.androidx-startup" tools:node="merge">

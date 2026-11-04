@@ -6,17 +6,21 @@ data class Exercise(
     val met: Double, val instructions: List<String>, val muscles: List<String>,
     val lowNoise: Boolean, val gentle: Boolean, val campusOnly: Boolean,
     val alternativeId: String, val demo: List<Pose>, val cue: String,
+    val demo3d: List<SpatialPose>,
 ) {
     fun validate() {
         require(id.matches(Regex("[a-z0-9-]+")) && name.isNotBlank())
         require(category in Categories.all && difficulty in listOf("Beginner", "Intermediate", "Advanced"))
         require(met.isFinite() && met in 1.0..15.0 && instructions.size >= 3 && muscles.isNotEmpty())
         require(demo.size >= 2 && demo.all { it.points.size == 26 && it.points.all { n -> n.isFinite() && n in 0f..1f } })
+        require(demo3d.size >= 2 && demo3d.all { it.points.size == 39 && it.points.all { n -> n.isFinite() && n in -2.5f..2.5f } })
     }
 }
 /** 13 normalized joints: head, neck, shoulders, elbows, hands, pelvis, knees and feet.
  * Joint order and connectivity are shared by the offline vector demo renderer. */
 data class Pose(val points: List<Float>)
+/** Same 13 joints, in metres: X left/right, Y up, Z forward. */
+data class SpatialPose(val points: List<Float>)
 object Categories {
     val all = listOf("HIIT", "Strength", "Cardio", "Yoga & stretch", "Core", "Dance", "Walking & running", "Dorm quiet")
 }

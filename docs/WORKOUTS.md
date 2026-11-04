@@ -1,7 +1,7 @@
 # Workouts increment
 
 The Workouts feature provides a searchable 72-exercise library, detail/alternative
-screens, interactive movement sketches, a 2–20 minute generator and a guided player.
+screens, interactive 3D human demonstrations, a 2–20 minute generator and a guided player.
 It builds on the existing Auth/profile flow and encrypted Room database.
 
 ## Domain and catalogue

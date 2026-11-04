@@ -9,6 +9,13 @@ For this prepared cloud machine, see [tool activation](docs/CLOUD_DEVELOPMENT.md
 Read [architecture and deliverables 1–6](docs/ARCHITECTURE.md) for the folder structure,
 Firestore schema/security model, Room entities/DAOs, dependencies, navigation and scope.
 
+## 3D exercise demos · 0.4
+
+All 72 moves use solid animated 3D people with lighting, perspective and depth.
+Turn the camera on exercise details or in the workout player to inspect another
+angle. The model, movement data and spoken countdowns work offline. Pausing and
+Android's reduced-motion setting are respected. See [3D demos](docs/EXERCISE_DEMOS.md).
+
 ## Exercise demos and countdowns · 0.3
 
 All 72 moves now feature a clothed 2D human, animated in the library and player.
@@ -42,7 +49,7 @@ remain available where needed. See [UI redesign](docs/UI_REDESIGN.md).
 The library contains [72 bundled exercises](app/src/main/assets/exercises.json) across
 HIIT, strength, cardio, yoga/stretching, core, dance, walking/running and quiet dorm moves.
 Browse by category, search by name or muscle, or choose low-noise/gentle options. Details
-include animated 2D human demos, written steps, easier alternatives and MET estimates.
+include animated 3D human demos, written steps, easier alternatives and MET estimates.
 
 Tap **I have a few minutes**, select 2–20 minutes (including 5/10/15/20 presets), and
 generate a plan. The duration includes a 30-second warm-up, 40-second work / 20-second

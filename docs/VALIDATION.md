@@ -182,3 +182,48 @@ preparation, the Countdown sound switch toggled off/on, starting showed the coun
 and Go transition, and pausing stopped at 27 seconds remaining. The initial switch
 assertion selected its uncheckable description child; selecting the actual checkable
 parent fixed the test without an app change. The inspected audio error log was empty.
+
+## Solid 3D exercise demos 0.4.0
+
+The universal version-code-4 debug APK builds successfully. All 111 JVM tests pass,
+including new tests for all 72 XYZ rigs, closed motion cycles, sagittal squat/knee
+movement, opposite torso orientation in face-up/face-down exercises, and finite
+volumetric meshes with unit normals. Lint reports 0 errors and 11 warnings: the
+previous 9 plus a programmatic-view constructor/tooling notice and a bitmap KTX
+suggestion. The two incompatible external Lifecycle lint checks remain skipped.
+
+Native OpenGL ES 2 renders a solid clothed human with perspective, depth testing,
+per-pixel lighting and a stage/contact shadow. A single worker/context serves all
+views. The Android 8 emulator rendered library standing/floor models and a larger
+squat detail, with camera turn/reset and turning while paused checked. Screenshots
+are retained locally. The existing local profile and paused workout survived update.
+
+A first playback check used the emulator's persisted animator scale of zero and
+therefore showed a still pose. Switching the global setting also exposed a cache
+race in ValueAnimator.areAnimatorsEnabled(). The final view reads the actual global
+setting initially and from its content observer, so re-enabling motion takes effect
+without leaving the screen. A bounded graphics-startup timeout selects the same
+mesh's labelled CPU still preview if a graphics surface never becomes ready.
+
+The final emulator package's DEX and resources match the frozen universal APK. Its
+signature matches earlier releases and the registered Android OAuth certificate.
+No new third-party model/rendering dependency is needed; model/choreography source
+and all audio are bundled. Physical-phone graphics performance and actual speaker
+playback remain unverified. No Firebase deployment or environment publication was
+performed for this change.
+
+The final player smoke check confirmed live native 3D playback while the work timer
+advanced from 26 to 23 seconds. Four captured frames changed 3,473–4,076 pixels in
+the model region, with the head and torso moving visibly. Logs confirm a hardware
+TextureView, active graphics client and first mesh frame. The check began with OS
+animations disabled for navigation, then re-enabled them on the player; the model
+animated after that transition. The final universal APK matches the tested emulator
+package's DEX/resources.
+
+The software emulator's System UI encountered startup timeouts and UI automation was
+unreliable. Direct input and visual capture were used for the final check. Testing
+also exposed temporary view detach handling: cleanup now happens on actual texture
+destruction or permanent view release, and readiness is signalled by the rendered
+mesh rather than an initial TextureView clear. These fixes prevent losing the render
+client during Compose view changes. Screenshots and temporary debugging/input helpers
+remain outside the source and public artifacts.
