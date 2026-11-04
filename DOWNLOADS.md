@@ -1,19 +1,23 @@
-# CampusFit 0.2.0 · a little move, a big mood
+# CampusFit 0.3.0 - human exercise demos and offline countdowns
 
-Download: https://raw.githubusercontent.com/NiiOkai32/himothy/apk-download-20261103/CampusFit-0.2.0-download.zip
+Download: https://raw.githubusercontent.com/NiiOkai32/himothy/apk-download-20261103/CampusFit-0.3.0-download.zip
 
-Extract the ZIP and install CampusFit.apk on Android 8.0+. This update uses the same signing key as the previous build (version code 2), so it can update it without uninstalling.
+Extract the ZIP, then install CampusFit.apk on Android 8.0 or later. Version code 3
+uses the existing signing certificate and can update the previous app without uninstalling.
 
-## What changed
+- Animated, clothed 2D people demonstrate all 72 exercises in the library, details and player.
+- Exercise-specific movements include standing, floor, dance and outdoor exercises.
+- Spoken 3, 2, 1 and go before each movement, plus the final-three-second countdown.
+- Countdown clips work offline, with a separate sound switch, optional form narration and haptics.
+- Previews can be paused; disabled Android animations show a representative still pose.
+- Count-ins add 3 seconds per movement without earning activity time or calories.
 
-- Illustrated lime mascot, violet/peach cards and rounded Outfit typography.
-- Three-step setup, illustrated workout cards and a more focused home screen.
-- Email, weigh-ins, reminders, timetables and social forms in tap-to-open sheets.
-- Visual achievement cards and playful celebration pop-ups.
-- Explicit health/privacy choices retained. Opening recording/workout tips pauses activity.
+106 JVM tests pass; lint reports no errors and 9 existing warnings. Android 8 emulator
+checks cover human illustrations, live animation, reduced motion and upgrade retention. The player puts start/pause beside the countdown
+and moves audio controls into a settings sheet.
+The signed universal APK includes ARM and x86 variants. Audio clips are bundled and
+validated; speaker playback on a physical phone remains to be checked.
 
-This is a debug/test build with the supplied Firebase/Google configuration. Cloud Functions are still deferred: shared games, remote push, cloud activity uploads and full cloud deletion need backend deployment. Physical-device sign-in/sensors remain unverified.
-
-Checksums accompany the ZIP and its enclosed APK. No application source is published by this artifact update.
-
-Verified: 99 JVM tests, 0 lint errors (9 existing warnings), APK signature, and basic Android 8 emulator flows including profile retention, expanded sheets, setup scrolling and pausing workouts for tips. Live sign-in and physical sensors remain unverified.
+This is a debug/test build. The supplied Firebase client configuration is retained;
+Cloud Functions deployment is still deferred. No screenshots or app source are included
+in this artifact update. ZIP and APK checksums accompany the download.
